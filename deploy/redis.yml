@@ -1,0 +1,41 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: redis
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:3.2.4
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "300Mi"
+            limits:
+              cpu: "500m"
+              memory: "1000Mi"
+          ports:
+            - name: redis
+              containerPort: 6379
+              protocol: TCP
+          livenessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - "redis-cli -h $(hostname) ping"
+            initialDelaySeconds: 15
+            timeoutSeconds: 5
+          readinessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - "redis-cli -h $(hostname) ping"
+            initialDelaySeconds: 15
+            timeoutSeconds: 5

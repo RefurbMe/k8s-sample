@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: amq
+  labels:
+    app: amq
+spec:
+  ports:
+  - port: 15672
+    targetPort: 15672
+    name: http
+  - port: 5672
+    targetPort: 5672
+    name: amq
+  selector:
+    name: amq

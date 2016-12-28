@@ -1,0 +1,54 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: us.gcr.io/your-project-name/frontend:latest
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "100Mi"
+            limits:
+              cpu: "200m"
+              memory: "300Mi"
+          # You'd need to create a http endpoint GET /_healthcheck for the heathcheck
+          readinessProbe:
+            httpGet:
+              path: /_healthcheck
+              port: 80
+            initialDelaySeconds: 5
+            timeoutSeconds: 15
+          livenessProbe:
+            httpGet:
+              path: /_healthcheck
+              port: 80
+            initialDelaySeconds: 5
+            timeoutSeconds: 15
+          env:
+            - name: AMQ_ENV_RABBITMQ_DEFAULT_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: amq
+                  key: user
+            - name: AMQ_ENV_RABBITMQ_DEFAULT_PASS
+              valueFrom:
+                configMapKeyRef:
+                  name: amq
+                  key: password
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: node
+                  key: NODE_ENV

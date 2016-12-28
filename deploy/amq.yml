@@ -1,0 +1,52 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: amq
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: amq
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: amq
+          image: rabbitmq:3-management
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "200Mi"
+            limits:
+              cpu: "200m"
+              memory: "300Mi"
+          ports:
+            - containerPort: 5672
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            tcpSocket:
+              port: 5672
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          livenessProbe:
+            failureThreshold: 3
+            tcpSocket:
+              port: 5672
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          env:
+            - name: RABBITMQ_DEFAULT_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: amq
+                  key: user
+            - name: RABBITMQ_DEFAULT_PASS
+              valueFrom:
+                configMapKeyRef:
+                  name: amq
+                  key: password
