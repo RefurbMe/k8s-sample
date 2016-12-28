@@ -40,5 +40,8 @@ kubectl proxy > /dev/null &
 # http://localhost:8001/api/v1/proxy/namespaces/kube-system/services/kubernetes-dashboard/#/workload
 ```
 
+# Deploy your containers using a CI tool
+Full instructions on: https://github.com/RefurbMe/k8s-deploy
+
 ## Contributions
 Feel free to fork this project and open a PR with improvements!
