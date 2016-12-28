@@ -11,6 +11,7 @@ spec:
     spec:
       containers:
         - name: api
+          # Don't forget to change "your-project-name" here
           image: us.gcr.io/your-project-name/api:latest
           ports:
             - name: http

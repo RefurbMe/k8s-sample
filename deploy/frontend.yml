@@ -11,6 +11,7 @@ spec:
     spec:
       containers:
         - name: frontend
+          # Don't forget to change "your-project-name" here
           image: us.gcr.io/your-project-name/frontend:latest
           ports:
             - name: http
