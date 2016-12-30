@@ -4,10 +4,11 @@ metadata:
   name: amq
 spec:
   replicas: 1
+  revisionHistoryLimit: 0
   template:
     metadata:
       labels:
-        name: amq
+        app: amq
     spec:
       restartPolicy: Always
       containers:
@@ -23,14 +24,14 @@ spec:
           ports:
             - containerPort: 5672
               protocol: TCP
-          readinessProbe:
+                    readinessProbe:
             failureThreshold: 3
             tcpSocket:
               port: 5672
             initialDelaySeconds: 15
             periodSeconds: 10
             successThreshold: 1
-            timeoutSeconds: 1
+            timeoutSeconds: 15
           livenessProbe:
             failureThreshold: 3
             tcpSocket:
@@ -38,7 +39,7 @@ spec:
             initialDelaySeconds: 15
             periodSeconds: 10
             successThreshold: 1
-            timeoutSeconds: 1
+            timeoutSeconds: 15
           env:
             - name: RABBITMQ_DEFAULT_USER
               valueFrom:
